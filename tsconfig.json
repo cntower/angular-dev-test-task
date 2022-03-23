@@ -4,6 +4,8 @@
 		"paths": {
 			"@bp/line-chart/models": ["libs/line-chart/models/src/index.ts"],
 			"@bp/line-chart/services": ["libs/line-chart/services/src/index.ts"],
+			"@bp/weather-forecast/domain": ["libs/weather-forecast/domain/src/index.ts"],
+			"@bp/weather-forecast/feature-search": ["libs/weather-forecast/feature-search/src/index.ts"],
 			"@bp/weather-forecast/services": ["libs/weather-forecast/services/src/index.ts"]
 		},
 		"baseUrl": ".",

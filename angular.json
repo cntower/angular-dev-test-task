@@ -80,6 +80,42 @@
 			},
 			"tags": []
 		},
+		"weather-forecast-domain": {
+			"projectType": "library",
+			"root": "libs/weather-forecast/domain",
+			"sourceRoot": "libs/weather-forecast/domain/src",
+			"prefix": "bp",
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/weather-forecast/domain/src/**/*.ts",
+							"libs/weather-forecast/domain/src/**/*.html"
+						]
+					}
+				}
+			},
+			"tags": []
+		},
+		"weather-forecast-feature-search": {
+			"projectType": "library",
+			"root": "libs/weather-forecast/feature-search",
+			"sourceRoot": "libs/weather-forecast/feature-search/src",
+			"prefix": "bp",
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/weather-forecast/feature-search/src/**/*.ts",
+							"libs/weather-forecast/feature-search/src/**/*.html"
+						]
+					}
+				}
+			},
+			"tags": []
+		},
 		"weather-forecast-services": {
 			"projectType": "library",
 			"root": "libs/weather-forecast/services",
