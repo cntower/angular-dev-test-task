@@ -9,7 +9,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import {WeatherForecastFeatureSearchModule} from '@bp/weather-forecast/feature-search';
-import {API_KEY} from '../../../../libs/weather-forecast/domain/src/lib/infrastructure/api-kye.token';
+import {API_KEY} from '../../../../libs/weather-forecast/domain/src/lib/infrastructure/api-key.token';
+import {BASE_URL} from '../../../../libs/weather-forecast/domain/src/lib/infrastructure/base-url.token';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -31,7 +32,10 @@ import {API_KEY} from '../../../../libs/weather-forecast/domain/src/lib/infrastr
 		!environment.production ? StoreDevtoolsModule.instrument() : [],
 		WeatherForecastFeatureSearchModule,
 	],
-	providers: [{provide: API_KEY, useValue: environment.apiKey}],
+	providers: [
+		{provide: API_KEY, useValue: environment.apiKey},
+		{provide: BASE_URL, useValue: environment.baseUrl},
+	],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}
