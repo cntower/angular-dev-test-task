@@ -7,3 +7,8 @@ export * as dailyForecastSelectors from './lib/+state/daily-forecast/daily-forec
 export * as dailyForecastReducer from './lib/+state/daily-forecast/daily-forecast.reducer';
 export * as dailyForecastActions from './lib/+state/daily-forecast/daily-forecast.actions';
 export * from './lib/weather-forecast-domain.module';
+export * from './lib/infrastructure/api-key.token';
+export * from './lib/infrastructure/base-url.token';
+export * from './lib/entities/locales-item-dto';
+export * from './lib/entities/daily-forecast-dto';
+export * from './lib/entities/hourly-forecast-dto';
