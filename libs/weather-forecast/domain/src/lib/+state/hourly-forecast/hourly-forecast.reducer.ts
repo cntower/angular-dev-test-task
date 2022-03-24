@@ -1,14 +1,15 @@
-import { createReducer, on, Action } from '@ngrx/store';
+import {Action, createReducer, on} from '@ngrx/store';
 
 import * as HourlyForecastActions from './hourly-forecast.actions';
-// import { HourlyForecastEntity } from './hourly-forecast.models';
+import {HourlyForecastDto} from '../../entities/hourly-forecast-dto';
 
 export const HOURLY_FORECAST_FEATURE_KEY = 'hourlyForecast';
 
 export interface State {
-	selectedId?: string | number; // which HourlyForecast record has been selected
+	hourlyForecast: HourlyForecastDto | null,
 	loaded: boolean; // has the HourlyForecast list been loaded
 	error?: string | null; // last known error (if any)
+	cityNotFound: boolean | null;
 }
 
 export interface HourlyForecastPartialState {
@@ -17,16 +18,19 @@ export interface HourlyForecastPartialState {
 
 export const initialState: State = {
 	// set initial required properties
+	hourlyForecast: null,
 	loaded: false,
+	cityNotFound: null,
 };
 
 const hourlyForecastReducer = createReducer(
 	initialState,
-	on(HourlyForecastActions.loadHourlyForecast, state => ({ ...state, loaded: false, error: null })),
-	// on(HourlyForecastActions.loadHourlyForecastSuccess, (state, { hourlyForecast }) =>
-	// 	hourlyForecastAdapter.setAll(hourlyForecast, { ...state, loaded: true })
-	// ),
-	on(HourlyForecastActions.loadHourlyForecastFailure, (state, { error }) => ({ ...state, error }))
+	on(HourlyForecastActions.loadHourlyForecast, state => ({...state, loaded: false, error: null, cityNotFound: false})),
+	on(HourlyForecastActions.loadHourlyForecastSuccess, (state, {hourlyForecast}) =>
+		({...state, hourlyForecast, loaded: true})
+	),
+	on(HourlyForecastActions.loadHourlyForecastFailure, (state, {error}) => ({...state, error})),
+	on(HourlyForecastActions.loadHourlyForecastCityNotFound, state => ({...state, cityNotFound: true}))
 );
 
 export function reducer(state: State | undefined, action: Action) {

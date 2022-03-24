@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { HourlyForecastEntity } from './hourly-forecast.models';
+import {HourlyForecastDto} from '../../entities/hourly-forecast-dto';
 
 export const init = createAction('[HourlyForecast Page] Init');
 
@@ -10,7 +10,11 @@ export const loadHourlyForecast = createAction(
 
 export const loadHourlyForecastSuccess = createAction(
 	'[HourlyForecast/API] Load HourlyForecast Success',
-	props<{ hourlyForecast: HourlyForecastEntity[] }>()
+	props<{ hourlyForecast: HourlyForecastDto }>()
+);
+
+export const loadHourlyForecastCityNotFound = createAction(
+	'[HourlyForecast/API] Load HourlyForecast CityNotFound'
 );
 
 export const loadHourlyForecastFailure = createAction(

@@ -1,10 +1,9 @@
-export * from './lib/+state/hourly-forecast/hourly-forecast.models';
-export * as hourlyForecastSelectors from './lib/+state/hourly-forecast/hourly-forecast.selectors';
-export * as hourlyForecastReducer from './lib/+state/hourly-forecast/hourly-forecast.reducer';
+export * as HourlyForecastSelectors from './lib/+state/hourly-forecast/hourly-forecast.selectors';
+export * as HourlyForecastReducer from './lib/+state/hourly-forecast/hourly-forecast.reducer';
 export * as HourlyForecastActions from './lib/+state/hourly-forecast/hourly-forecast.actions';
 export * from './lib/+state/daily-forecast/daily-forecast.models';
-export * as dailyForecastSelectors from './lib/+state/daily-forecast/daily-forecast.selectors';
-export * as dailyForecastReducer from './lib/+state/daily-forecast/daily-forecast.reducer';
+export * as DailyForecastSelectors from './lib/+state/daily-forecast/daily-forecast.selectors';
+export * as DailyForecastReducer from './lib/+state/daily-forecast/daily-forecast.reducer';
 export * as DailyForecastActions from './lib/+state/daily-forecast/daily-forecast.actions';
 export * from './lib/weather-forecast-domain.module';
 export * from './lib/infrastructure/api-key.token';

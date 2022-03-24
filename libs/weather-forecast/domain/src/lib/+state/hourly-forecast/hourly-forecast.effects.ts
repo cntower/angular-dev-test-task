@@ -1,27 +1,42 @@
-import { Injectable } from '@angular/core';
-import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { fetch } from '@nrwl/angular';
+import {Injectable} from '@angular/core';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
+import {fetch} from '@nrwl/angular';
 
 import * as HourlyForecastActions from './hourly-forecast.actions';
-// import * as HourlyForecastFeature from './hourly-forecast.reducer';
+import {WeatherForecastApiService} from '@bp/weather-forecast/services';
+import {map, of, switchMap} from 'rxjs';
 
 @Injectable()
 export class HourlyForecastEffects {
-	init$ = createEffect(() =>
+	search$ = createEffect(() =>
 		this.actions$.pipe(
-			ofType(HourlyForecastActions.init),
+			ofType(HourlyForecastActions.loadHourlyForecast),
 			fetch({
-				run: action => {
-					// Your custom service 'load' logic goes here. For now just return a success action...
-					return HourlyForecastActions.loadHourlyForecastSuccess({ hourlyForecast: [] });
-				},
+				run: action => this._weatherForecastApiService.getLocales(action.query)
+					.pipe(
+						map(locales => locales[0]),
+						switchMap(locale => {
+							if (locale) {
+								return this._weatherForecastApiService.getHourlyForecast(locale.lat, locale.lon)
+									.pipe(
+										map(hourlyForecast => HourlyForecastActions.loadHourlyForecastSuccess({hourlyForecast}))
+									)
+							} else {
+								return of(HourlyForecastActions.loadHourlyForecastCityNotFound());
+							}
+						})
+					),
 				onError: (action, error) => {
 					console.error('Error', error);
-					return HourlyForecastActions.loadHourlyForecastFailure({ error });
+					return HourlyForecastActions.loadHourlyForecastFailure({error});
 				},
 			})
 		)
 	);
 
-	constructor(private readonly actions$: Actions) {}
+	constructor(
+		private actions$: Actions,
+		private _weatherForecastApiService: WeatherForecastApiService,
+	) {
+	}
 }

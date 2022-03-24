@@ -1,39 +1,35 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {
-	dailyForecastReducer,
-	hourlyForecastReducer,
+	DailyForecastReducer,
+	HourlyForecastReducer,
 	MODE_NAME,
 	QUERY_NAME,
 	TimeInterval,
 	DailyForecastActions,
 	HourlyForecastActions,
+	DailyForecastSelectors,
+	HourlyForecastSelectors,
 } from '@bp/weather-forecast/domain';
-import {WeatherForecastApiService} from '@bp/weather-forecast/services';
-import {map, switchMap, tap} from 'rxjs';
 import {ParamMap} from '@angular/router';
+
 
 
 @Injectable({providedIn: 'root'})
 export class SearchFacade {
-	test = 'test';
+	readonly getDailyForecast$ = this._dailyForecastStore.select(DailyForecastSelectors.getDailyForecast);
+	readonly getDailyForecastLoaded$ = this._dailyForecastStore.select(DailyForecastSelectors.getDailyForecastLoaded);
+	readonly getDailyForecastCityNotFound$ = this._dailyForecastStore.select(DailyForecastSelectors.getDailyForecastCityNotFound);
+
+	readonly getHourlyForecast$ = this._hourlyForecastStore.select(HourlyForecastSelectors.getHourlyForecast);
+	readonly getHourlyForecastLoaded$ = this._hourlyForecastStore.select(HourlyForecastSelectors.getHourlyForecastLoaded);
+	readonly getHourlyForecastCityNotFound$ = this._hourlyForecastStore.select(HourlyForecastSelectors.getHourlyForecastCityNotFound);
 
 	constructor(
-		private _dailyForecastStore: Store<dailyForecastReducer.DailyForecastPartialState>,
-		private _hourlyForecastStore: Store<hourlyForecastReducer.HourlyForecastPartialState>,
-		private weatherForecastApiService: WeatherForecastApiService,
+		private _dailyForecastStore: Store<DailyForecastReducer.DailyForecastPartialState>,
+		private _hourlyForecastStore: Store<HourlyForecastReducer.HourlyForecastPartialState>,
 	) {
-		this.weatherForecastApiService.getLocales('London')
-			.pipe(
-				tap(locales => console.log(locales[0].country)),
-				map(locales => locales[0]),
-				switchMap(locale => this.weatherForecastApiService.getHourlyForecast(locale.lat, locale.lon)),
-				tap(console.log),
-			)
-			.subscribe()
-		;
-		// console.log(this.weatherForecastApiService.apiKey, 'apiKey');
-		console.log(this._dailyForecastStore, this._hourlyForecastStore);
+
 	}
 
 	search(params: ParamMap) {

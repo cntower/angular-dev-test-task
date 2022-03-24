@@ -8,4 +8,6 @@ export const getHourlyForecastLoaded = createSelector(getHourlyForecastState, (s
 
 export const getHourlyForecastError = createSelector(getHourlyForecastState, (state: State) => state.error);
 
-export const getSelectedId = createSelector(getHourlyForecastState, (state: State) => state.selectedId);
+export const getHourlyForecast = createSelector(getHourlyForecastState, (state: State) => state.hourlyForecast);
+
+export const getHourlyForecastCityNotFound = createSelector(getHourlyForecastState, (state: State) => state.cityNotFound);

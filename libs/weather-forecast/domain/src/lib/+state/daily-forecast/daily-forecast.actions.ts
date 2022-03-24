@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { DailyForecastEntity } from './daily-forecast.models';
+import {DailyForecastDto} from '../../entities/daily-forecast-dto';
+import {LocalesItemDto} from '../../entities/locales-item-dto';
 
 export const init = createAction('[DailyForecast Page] Init');
 
@@ -10,7 +11,11 @@ export const loadDailyForecast = createAction(
 
 export const loadDailyForecastSuccess = createAction(
 	'[DailyForecast/API] Load DailyForecast Success',
-	props<{ dailyForecast: DailyForecastEntity[] }>()
+	props<{ dailyForecast: DailyForecastDto, locale: LocalesItemDto }>()
+);
+
+export const loadDailyForecastCityNotFound = createAction(
+	'[DailyForecast/API] Load DailyForecast CityNotFound'
 );
 
 export const loadDailyForecastFailure = createAction(
