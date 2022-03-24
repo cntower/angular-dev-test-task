@@ -3,6 +3,11 @@ import { DailyForecastEntity } from './daily-forecast.models';
 
 export const init = createAction('[DailyForecast Page] Init');
 
+export const loadDailyForecast = createAction(
+	'[DailyForecast/API] Load DailyForecast',
+	props<{ query: string }>()
+);
+
 export const loadDailyForecastSuccess = createAction(
 	'[DailyForecast/API] Load DailyForecast Success',
 	props<{ dailyForecast: DailyForecastEntity[] }>()

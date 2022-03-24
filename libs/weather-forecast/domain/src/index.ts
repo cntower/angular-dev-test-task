@@ -1,14 +1,16 @@
 export * from './lib/+state/hourly-forecast/hourly-forecast.models';
 export * as hourlyForecastSelectors from './lib/+state/hourly-forecast/hourly-forecast.selectors';
 export * as hourlyForecastReducer from './lib/+state/hourly-forecast/hourly-forecast.reducer';
-export * as hourlyForecastActions from './lib/+state/hourly-forecast/hourly-forecast.actions';
+export * as HourlyForecastActions from './lib/+state/hourly-forecast/hourly-forecast.actions';
 export * from './lib/+state/daily-forecast/daily-forecast.models';
 export * as dailyForecastSelectors from './lib/+state/daily-forecast/daily-forecast.selectors';
 export * as dailyForecastReducer from './lib/+state/daily-forecast/daily-forecast.reducer';
-export * as dailyForecastActions from './lib/+state/daily-forecast/daily-forecast.actions';
+export * as DailyForecastActions from './lib/+state/daily-forecast/daily-forecast.actions';
 export * from './lib/weather-forecast-domain.module';
 export * from './lib/infrastructure/api-key.token';
 export * from './lib/infrastructure/base-url.token';
 export * from './lib/entities/locales-item-dto';
 export * from './lib/entities/daily-forecast-dto';
 export * from './lib/entities/hourly-forecast-dto';
+export * from './lib/entities/time-interval';
+export * from './lib/entities/query-param-names';

@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 import {WeatherForecastFeatureSearchModule} from '@bp/weather-forecast/feature-search';
 import {API_KEY, BASE_URL} from '@bp/weather-forecast/domain';
 import {HttpClientModule} from '@angular/common/http';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -32,6 +33,7 @@ import {HttpClientModule} from '@angular/common/http';
 		!environment.production ? StoreDevtoolsModule.instrument() : [],
 		WeatherForecastFeatureSearchModule,
 		HttpClientModule,
+		RouterModule.forRoot([]),
 	],
 	providers: [
 		{provide: API_KEY, useValue: environment.apiKey},
