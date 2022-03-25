@@ -161,6 +161,24 @@
 				}
 			},
 			"tags": []
+		},
+		"weather-forecast-ui-forecast": {
+			"projectType": "library",
+			"root": "libs/weather-forecast/ui-forecast",
+			"sourceRoot": "libs/weather-forecast/ui-forecast/src",
+			"prefix": "bp",
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/weather-forecast/ui-forecast/src/**/*.ts",
+							"libs/weather-forecast/ui-forecast/src/**/*.html"
+						]
+					}
+				}
+			},
+			"tags": []
 		}
 	}
 }
