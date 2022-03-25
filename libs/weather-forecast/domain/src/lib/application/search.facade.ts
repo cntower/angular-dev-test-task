@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {
-	DailyForecastActions, DailyViewModel,
-	HourlyForecastActions, HourlyViewModel,
+	DailyForecastActions,
+	ForecastItemViewModel,
+	HourlyForecastActions,
 	LocationActions,
-	LocationDto,
 	LocationReducer,
 	LocationSelectors,
 	MODE_NAME,
@@ -14,13 +14,14 @@ import {
 import {ParamMap} from '@angular/router';
 import {filter, Observable, take, tap} from 'rxjs';
 import {LocationEntity} from '../+state/location/location.models';
+import {Dictionary} from '@ngrx/entity';
 
 
 @Injectable({providedIn: 'root'})
 export class SearchFacade {
 	readonly getLocationNoCityIsFound$ = this._store.select(LocationSelectors.getLocationNoCityIsFound);
-	readonly getLocationDailyViewModel$: Observable<DailyViewModel[]> = this._store.select(LocationSelectors.getLocationDailyViewModel);
-	readonly getLocationHourlyViewModel$: Observable<HourlyViewModel[]> = this._store.select(LocationSelectors.getLocationHourlyViewModel);
+	readonly getLocationDailyViewModel$: Observable<ForecastItemViewModel[]> = this._store.select(LocationSelectors.getLocationDailyViewModel);
+	readonly getLocationHourlyViewModel$: Observable<ForecastItemViewModel[]> = this._store.select(LocationSelectors.getLocationHourlyViewModel);
 
 	constructor(
 		private _store: Store<LocationReducer.State>,
@@ -35,9 +36,9 @@ export class SearchFacade {
 			this._store.select(LocationSelectors.getLocationByQuery, {cityName: query})
 				.pipe(
 					take(1),
-					tap(locationEntity => {
+					tap((locationEntity: LocationEntity) => {
 						if (locationEntity) {
-							this._loadForecastByLocation(locationEntity.location, mode);
+							this._addForecastByLocation(locationEntity, mode);
 						} else {
 							this._store.dispatch(LocationActions.loadLocation({cityNameQuery: query}));
 							this._loadForecastAfterLocation(query, mode);
@@ -53,17 +54,20 @@ export class SearchFacade {
 			.pipe(
 				filter((locationEntity: LocationEntity) => !!locationEntity),
 				take(1),
-				tap((locationEntity: LocationEntity) => this._loadForecastByLocation(locationEntity.location, mode)
+				tap((locationEntity: LocationEntity) => this._addForecastByLocation(locationEntity, mode)
 				)
 			).subscribe()
 	}
 
-	private _loadForecastByLocation(location: LocationDto, mode: string): void {
+	private _addForecastByLocation(locationEntity: LocationEntity, mode: string): void {
+		if((locationEntity as Dictionary<any>)[mode]){
+			return;
+		}
 		if (mode === TimeInterval.Daily.toString()) {
-			this._store.dispatch(DailyForecastActions.loadDailyForecast({location}))
+			this._store.dispatch(DailyForecastActions.loadDailyForecast({location: locationEntity.location}))
 		}
 		if (mode === TimeInterval.Hourly.toString()) {
-			this._store.dispatch(HourlyForecastActions.loadHourlyForecast({location}))
+			this._store.dispatch(HourlyForecastActions.loadHourlyForecast({location: locationEntity.location}))
 		}
 	}
 }

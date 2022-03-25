@@ -14,7 +14,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 	private _unsubscribe$ = new Subject<void>();
 
 	readonly getLocationNoCityIsFound$ = this._searchFacade.getLocationNoCityIsFound$;
-	readonly getLocationDailyViewModel$ = this._searchFacade.getLocationDailyViewModel$;
+	readonly getLocationDailyViewModels$ = this._searchFacade.getLocationDailyViewModel$;
 	readonly getLocationHourlyViewModel$ = this._searchFacade.getLocationHourlyViewModel$;
 
 	TimeInterval = TimeInterval;

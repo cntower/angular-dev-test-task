@@ -6,6 +6,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
+import {WeatherForecastUiForecastModule} from '@bp/weather-forecast/ui-forecast';
 
 @NgModule({
 	imports: [
@@ -15,6 +16,7 @@ import {MatButtonModule} from '@angular/material/button';
 		MatInputModule,
 		MatRadioModule,
 		MatButtonModule,
+		WeatherForecastUiForecastModule,
 	],
 	declarations: [
 		SearchComponent

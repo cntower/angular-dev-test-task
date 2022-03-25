@@ -13,14 +13,17 @@
 	</div>
 </form>
 <div *ngIf="getLocationNoCityIsFound$ | async">City not found</div>
-<div *ngFor="let dailyViewModel of getLocationDailyViewModel$ | async">
-	{{ dailyViewModel.cityName }}
-	<div *ngFor="let day of dailyViewModel.daily">{{ day.temp | number: '1.0-0' }} {{ day.dt | date: 'EEEE' }}</div>
-</div>
 
-<div *ngFor="let dailyViewModel of getLocationHourlyViewModel$ | async">
-	{{ dailyViewModel.cityName }}
-	<div *ngFor="let hour of dailyViewModel.hourly">
-		{{ hour.temp | number: '1.0-0' }} {{ hour.dt | date: 'HH:mm' }}
-	</div>
-</div>
+<ng-container [ngSwitch]="searchForm?.get('timeIntervalMode')?.value">
+	<bp-forecast-table
+		*ngSwitchCase="TimeInterval.Daily"
+		[viewModels]="getLocationDailyViewModels$ | async"
+		headerDatePipeFormat="cccccc"
+	></bp-forecast-table>
+
+	<bp-forecast-table
+		*ngSwitchCase="TimeInterval.Hourly"
+		[viewModels]="getLocationHourlyViewModel$ | async"
+		headerDatePipeFormat="HH:mm"
+	></bp-forecast-table>
+</ng-container>
