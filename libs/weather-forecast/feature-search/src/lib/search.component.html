@@ -10,4 +10,14 @@
 	</mat-radio-group>
 </form>
 <div *ngIf="getLocationNoCityIsFound$ | async">No City Is Found</div>
-<div *ngFor="let dailyViewModel of getLocationDailyViewModel$ | async">{{ dailyViewModel | json }}</div>
+<div *ngFor="let dailyViewModel of getLocationDailyViewModel$ | async">
+	{{ dailyViewModel.cityName }}
+	<div *ngFor="let day of dailyViewModel.daily">{{ day.temp | number: '1.0-0' }} {{ day.dt | date: 'EEEE' }}</div>
+</div>
+
+<div *ngFor="let dailyViewModel of getLocationHourlyViewModel$ | async">
+	{{ dailyViewModel.cityName }}
+	<div *ngFor="let hour of dailyViewModel.hourly">
+		{{ hour.temp | number: '1.0-0' }} {{ hour.dt | date: 'HH:mm' }}
+	</div>
+</div>

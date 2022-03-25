@@ -12,3 +12,5 @@ export * from './lib/entities/daily-forecast-dto';
 export * from './lib/entities/hourly-forecast-dto';
 export * from './lib/entities/time-interval';
 export * from './lib/entities/query-param-names';
+export * from './lib/entities/daily-view-model';
+export * from './lib/entities/hourly-view-model';

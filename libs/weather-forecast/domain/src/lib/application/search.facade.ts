@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {
-	DailyForecastActions,
-	HourlyForecastActions,
+	DailyForecastActions, DailyViewModel,
+	HourlyForecastActions, HourlyViewModel,
 	LocationActions,
 	LocationDto,
 	LocationReducer,
@@ -12,14 +12,15 @@ import {
 	TimeInterval,
 } from '@bp/weather-forecast/domain';
 import {ParamMap} from '@angular/router';
-import {filter, take, tap} from 'rxjs';
+import {filter, Observable, take, tap} from 'rxjs';
 import {LocationEntity} from '../+state/location/location.models';
 
 
 @Injectable({providedIn: 'root'})
 export class SearchFacade {
 	readonly getLocationNoCityIsFound$ = this._store.select(LocationSelectors.getLocationNoCityIsFound);
-	readonly getLocationDailyViewModel$ = this._store.select(LocationSelectors.getLocationDailyViewModel);
+	readonly getLocationDailyViewModel$: Observable<DailyViewModel[]> = this._store.select(LocationSelectors.getLocationDailyViewModel);
+	readonly getLocationHourlyViewModel$: Observable<HourlyViewModel[]> = this._store.select(LocationSelectors.getLocationHourlyViewModel);
 
 	constructor(
 		private _store: Store<LocationReducer.State>,
