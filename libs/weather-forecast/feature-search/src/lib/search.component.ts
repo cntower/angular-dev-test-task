@@ -35,17 +35,28 @@ export class SearchComponent implements OnInit, OnDestroy {
 	}
 
 	private _subscribeNavigationAfterFormChange() {
-		this.searchForm?.valueChanges
+		this.searchForm?.get('timeIntervalMode')?.valueChanges
 			.pipe(
 				takeUntil(this._unsubscribe$),
-				tap(form => {
+				tap(timeIntervalMode => {
 					this._router.navigate([], {
-						queryParams: {[MODE_NAME]: form.timeIntervalMode, [QUERY_NAME]: form.cityNameQuery},
+						queryParams: {[MODE_NAME]: timeIntervalMode},
 						relativeTo: this._route,
+						queryParamsHandling: 'merge',
 					});
 				})
 			)
 			.subscribe()
+	}
+
+	onSubmit(form: { timeIntervalMode: string; cityNameQuery: string }) {
+		if (!this.searchForm?.valid) {
+			return;
+		}
+		this._router.navigate([], {
+			queryParams: {[MODE_NAME]: form.timeIntervalMode, [QUERY_NAME]: form.cityNameQuery},
+			relativeTo: this._route,
+		});
 	}
 
 	private _subscribeSearchAfterNavigation() {

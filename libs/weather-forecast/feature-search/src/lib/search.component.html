@@ -1,5 +1,5 @@
 <h2>Weather in your city</h2>
-<form class="search-form" [formGroup]="searchForm" *ngIf="searchForm">
+<form class="search-form" [formGroup]="searchForm" *ngIf="searchForm" (ngSubmit)="onSubmit(searchForm.value)">
 	<mat-form-field aria-label="City name">
 		<mat-label>City</mat-label>
 		<input matInput type="text" formControlName="cityNameQuery" placeholder="Ex. London" />
@@ -8,8 +8,11 @@
 		<mat-radio-button value="{{ TimeInterval.Hourly }}">Hourly</mat-radio-button>
 		<mat-radio-button value="{{ TimeInterval.Daily }}">Daily</mat-radio-button>
 	</mat-radio-group>
+	<div>
+		<button mat-raised-button color="primary" class="search-button" [disabled]="!searchForm.valid">Search</button>
+	</div>
 </form>
-<div *ngIf="getLocationNoCityIsFound$ | async">No City Is Found</div>
+<div *ngIf="getLocationNoCityIsFound$ | async">City not found</div>
 <div *ngFor="let dailyViewModel of getLocationDailyViewModel$ | async">
 	{{ dailyViewModel.cityName }}
 	<div *ngFor="let day of dailyViewModel.daily">{{ day.temp | number: '1.0-0' }} {{ day.dt | date: 'EEEE' }}</div>
