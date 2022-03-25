@@ -13,14 +13,8 @@ import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 export class SearchComponent implements OnInit, OnDestroy {
 	private _unsubscribe$ = new Subject<void>();
 
-	readonly getDailyForecast$ = this._searchFacade.getDailyForecast$;
-	readonly getDailyForecastLoaded$ = this._searchFacade.getDailyForecastLoaded$;
-	readonly getDailyForecastCityNotFound$ = this._searchFacade.getDailyForecastCityNotFound$;
-
-	readonly getHourlyForecast$ = this._searchFacade.getHourlyForecast$;
-	readonly getHourlyForecastLoaded$ = this._searchFacade.getHourlyForecastLoaded$;
-	readonly getHourlyForecastCityNotFound$ = this._searchFacade.getHourlyForecastCityNotFound$;
-
+	readonly getLocationNoCityIsFound$ = this._searchFacade.getLocationNoCityIsFound$;
+	readonly getLocationDailyViewModel$ = this._searchFacade.getLocationDailyViewModel$;
 
 	TimeInterval = TimeInterval;
 

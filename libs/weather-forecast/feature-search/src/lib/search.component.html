@@ -9,4 +9,5 @@
 		<mat-radio-button value="{{ TimeInterval.Daily }}">Daily</mat-radio-button>
 	</mat-radio-group>
 </form>
-{{ getDailyForecast$ | async | json }}
+<div *ngIf="getLocationNoCityIsFound$ | async">No City Is Found</div>
+<div *ngFor="let dailyViewModel of getLocationDailyViewModel$ | async">{{ dailyViewModel | json }}</div>

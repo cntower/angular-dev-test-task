@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {API_KEY, BASE_URL, LocalesItemDto} from '@bp/weather-forecast/domain';
+import {API_KEY, BASE_URL, LocationDto} from '@bp/weather-forecast/domain';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {DailyForecastDto} from '@bp/weather-forecast/domain';
@@ -15,8 +15,8 @@ export class WeatherForecastApiService {
 	) {
 	}
 
-	getLocales(cityName: string):Observable<LocalesItemDto[]>{
-		return this._http.get<LocalesItemDto[]>(this._getGetLocalesRequestUrl(cityName));
+	getLocales(cityName: string):Observable<LocationDto[]>{
+		return this._http.get<LocationDto[]>(this._getGetLocalesRequestUrl(cityName));
 	}
 
 	getHourlyForecast(lat: number, lon: number):Observable<HourlyForecastDto>{

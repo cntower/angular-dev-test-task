@@ -1,4 +1,4 @@
-export interface LocalesItemDto {
+export interface LocationDto {
 	name: string;
 	local_names: { [key: string]: string };
 	lat: number;

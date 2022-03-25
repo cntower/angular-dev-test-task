@@ -1,33 +1,28 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {
-	DailyForecastReducer,
-	HourlyForecastReducer,
+	DailyForecastActions,
+	HourlyForecastActions,
+	LocationActions,
+	LocationDto,
+	LocationReducer,
+	LocationSelectors,
 	MODE_NAME,
 	QUERY_NAME,
 	TimeInterval,
-	DailyForecastActions,
-	HourlyForecastActions,
-	DailyForecastSelectors,
-	HourlyForecastSelectors,
 } from '@bp/weather-forecast/domain';
 import {ParamMap} from '@angular/router';
-
+import {filter, take, tap} from 'rxjs';
+import {LocationEntity} from '../+state/location/location.models';
 
 
 @Injectable({providedIn: 'root'})
 export class SearchFacade {
-	readonly getDailyForecast$ = this._dailyForecastStore.select(DailyForecastSelectors.getDailyForecast);
-	readonly getDailyForecastLoaded$ = this._dailyForecastStore.select(DailyForecastSelectors.getDailyForecastLoaded);
-	readonly getDailyForecastCityNotFound$ = this._dailyForecastStore.select(DailyForecastSelectors.getDailyForecastCityNotFound);
-
-	readonly getHourlyForecast$ = this._hourlyForecastStore.select(HourlyForecastSelectors.getHourlyForecast);
-	readonly getHourlyForecastLoaded$ = this._hourlyForecastStore.select(HourlyForecastSelectors.getHourlyForecastLoaded);
-	readonly getHourlyForecastCityNotFound$ = this._hourlyForecastStore.select(HourlyForecastSelectors.getHourlyForecastCityNotFound);
+	readonly getLocationNoCityIsFound$ = this._store.select(LocationSelectors.getLocationNoCityIsFound);
+	readonly getLocationDailyViewModel$ = this._store.select(LocationSelectors.getLocationDailyViewModel);
 
 	constructor(
-		private _dailyForecastStore: Store<DailyForecastReducer.DailyForecastPartialState>,
-		private _hourlyForecastStore: Store<HourlyForecastReducer.HourlyForecastPartialState>,
+		private _store: Store<LocationReducer.State>,
 	) {
 
 	}
@@ -36,14 +31,38 @@ export class SearchFacade {
 		const query = params.get(QUERY_NAME);
 		const mode = params.get(MODE_NAME);
 		if (query && mode) {
-			if (mode === TimeInterval.Daily) {
-				console.log(mode, mode === TimeInterval.Daily);
-				this._dailyForecastStore.dispatch(DailyForecastActions.loadDailyForecast({query}))
-			}
-			if (mode === TimeInterval.Hourly) {
-				console.log(mode, mode === TimeInterval.Hourly);
-				this._dailyForecastStore.dispatch(HourlyForecastActions.loadHourlyForecast({query}))
-			}
+			this._store.select(LocationSelectors.getLocationByQuery, {cityName: query})
+				.pipe(
+					take(1),
+					tap(locationEntity => {
+						if (locationEntity) {
+							this._loadForecastByLocation(locationEntity.location, mode);
+						} else {
+							this._store.dispatch(LocationActions.loadLocation({cityNameQuery: query}));
+							this._loadForecastAfterLocation(query, mode);
+						}
+					})
+				)
+				.subscribe();
+		}
+	}
+
+	private _loadForecastAfterLocation(query: string, mode: string): void {
+		this._store.select(LocationSelectors.getLocationByQuery, {cityName: query})
+			.pipe(
+				filter((locationEntity: LocationEntity) => !!locationEntity),
+				take(1),
+				tap((locationEntity: LocationEntity) => this._loadForecastByLocation(locationEntity.location, mode)
+				)
+			).subscribe()
+	}
+
+	private _loadForecastByLocation(location: LocationDto, mode: string): void {
+		if (mode === TimeInterval.Daily.toString()) {
+			this._store.dispatch(DailyForecastActions.loadDailyForecast({location}))
+		}
+		if (mode === TimeInterval.Hourly.toString()) {
+			this._store.dispatch(HourlyForecastActions.loadHourlyForecast({location}))
 		}
 	}
 }

@@ -1,16 +1,17 @@
 import { createAction, props } from '@ngrx/store';
 import {HourlyForecastDto} from '../../entities/hourly-forecast-dto';
+import {LocationDto} from '../../entities/location-dto';
 
 export const init = createAction('[HourlyForecast Page] Init');
 
 export const loadHourlyForecast = createAction(
 	'[HourlyForecast/API] Load HourlyForecast',
-	props<{ query: string }>()
+	props<{ location: LocationDto }>()
 );
 
 export const loadHourlyForecastSuccess = createAction(
 	'[HourlyForecast/API] Load HourlyForecast Success',
-	props<{ hourlyForecast: HourlyForecastDto }>()
+	props<{ hourlyForecast: HourlyForecastDto, location: LocationDto }>()
 );
 
 export const loadHourlyForecastCityNotFound = createAction(

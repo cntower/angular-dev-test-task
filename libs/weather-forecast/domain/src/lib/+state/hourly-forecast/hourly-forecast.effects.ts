@@ -4,28 +4,20 @@ import {fetch} from '@nrwl/angular';
 
 import * as HourlyForecastActions from './hourly-forecast.actions';
 import {WeatherForecastApiService} from '@bp/weather-forecast/services';
-import {map, of, switchMap} from 'rxjs';
+import {map} from 'rxjs';
 
 @Injectable()
 export class HourlyForecastEffects {
-	search$ = createEffect(() =>
+	loadHourlyForecast$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(HourlyForecastActions.loadHourlyForecast),
 			fetch({
-				run: action => this._weatherForecastApiService.getLocales(action.query)
-					.pipe(
-						map(locales => locales[0]),
-						switchMap(locale => {
-							if (locale) {
-								return this._weatherForecastApiService.getHourlyForecast(locale.lat, locale.lon)
-									.pipe(
-										map(hourlyForecast => HourlyForecastActions.loadHourlyForecastSuccess({hourlyForecast}))
-									)
-							} else {
-								return of(HourlyForecastActions.loadHourlyForecastCityNotFound());
-							}
-						})
-					),
+				run: action => {
+					return this._weatherForecastApiService.getHourlyForecast(action.location.lat, action.location.lon)
+						.pipe(
+							map(hourlyForecast => HourlyForecastActions.loadHourlyForecastSuccess({hourlyForecast, location: action.location}))
+						)
+				},
 				onError: (action, error) => {
 					console.error('Error', error);
 					return HourlyForecastActions.loadHourlyForecastFailure({error});
