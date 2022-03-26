@@ -1,0 +1,12 @@
+.search-form {
+	display: flex;
+	flex-flow: column;
+
+	.mat-radio-button ~ .mat-radio-button {
+		margin-left: 16px;
+	}
+}
+
+.search-button {
+	margin: 16px 0;
+}

@@ -18,6 +18,7 @@ export class SearchFacade {
 	readonly getIsDailyForecastLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsDailyForecastLoading);
 	readonly getIsHourlyForecastLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsHourlyForecastLoading);
 	readonly getIsAnyLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsAnyLoading);
+	readonly getLocationError$ = this._store.select(LocationSelectors.getLocationError);
 
 	constructor(
 		private readonly _store: Store<LocationReducer.State>,

@@ -1,7 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {SearchFacade} from '../../../domain/src/lib/application/search.facade';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MODE_NAME, QUERY_NAME, TimeInterval} from '@bp/weather-forecast/domain';
+import {MODE_NAME, QUERY_NAME, SearchFacade, SearchForm, TimeInterval} from '@bp/weather-forecast/domain';
 import {Subject, takeUntil, tap} from 'rxjs';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 
@@ -13,6 +11,7 @@ import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 export class SearchComponent implements OnInit, OnDestroy {
 	private _unsubscribe$ = new Subject<void>();
 
+	readonly getLocationError$ = this._searchFacade.getLocationError$;
 	readonly getLocationCityNotFound$ = this._searchFacade.getLocationCityNotFound$;
 	readonly getLocationDailyViewModels$ = this._searchFacade.getLocationDailyViewModel$;
 	readonly getLocationHourlyViewModel$ = this._searchFacade.getLocationHourlyViewModel$;
@@ -22,7 +21,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
 	readonly TimeInterval = TimeInterval;
 
-	searchForm?: FormGroup;
+	cityNameQuery = '';
+	timeIntervalMode = TimeInterval.daily;
 
 	constructor(
 		private readonly _searchFacade: SearchFacade,
@@ -32,36 +32,24 @@ export class SearchComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
-		this._setSearchForm();
 		this._subscribeToQueryParams();
-		this._subscribeToFormChange();
 	}
 
-	private _subscribeToFormChange() {
-		this.searchForm?.get('timeIntervalMode')?.valueChanges
-			.pipe(
-				takeUntil(this._unsubscribe$),
-				tap(timeIntervalMode => {
-					this._navigateByMode(timeIntervalMode);
-				})
-			)
-			.subscribe()
+	onTimeIntervalChanged(timeInterval: TimeInterval) {
+		this._navigateByTimeInterval(timeInterval);
 	}
 
-	private _navigateByMode(timeIntervalMode: TimeInterval) {
+	private _navigateByTimeInterval(timeInterval: TimeInterval) {
 		this._router.navigate([], {
-			queryParams: {[MODE_NAME]: timeIntervalMode},
+			queryParams: {[MODE_NAME]: timeInterval},
 			relativeTo: this._route,
 			queryParamsHandling: 'merge',
 		});
 	}
 
-	onSubmit(form: { timeIntervalMode: string; cityNameQuery: string }) {
-		if (!this.searchForm?.valid) {
-			return;
-		}
+	onSubmit(form: SearchForm) {
 		this._router.navigate([], {
-			queryParams: {[MODE_NAME]: form.timeIntervalMode, [QUERY_NAME]: form.cityNameQuery},
+			queryParams: {[MODE_NAME]: form.timeInterval, [QUERY_NAME]: form.cityNameQuery},
 			relativeTo: this._route,
 		});
 	}
@@ -72,29 +60,16 @@ export class SearchComponent implements OnInit, OnDestroy {
 				takeUntil(this._unsubscribe$),
 				tap((params: ParamMap) => {
 					this._updateFormWithQueryParams(params);
-					this._search(params);
+					this._searchFacade.search(this.cityNameQuery, this.timeIntervalMode);
 				})
 			)
-			.subscribe()
+			.subscribe();
 	}
 
 	private _updateFormWithQueryParams(params: ParamMap) {
-		this.searchForm?.get('cityNameQuery')?.setValue(params.get(QUERY_NAME));
-		this.searchForm?.get('timeIntervalMode')?.setValue(params.get(MODE_NAME));
-	}
-
-	private _search(params: ParamMap) {
-		const cityNameQuery = params.get(QUERY_NAME) || '';
+		this.cityNameQuery = params.get(QUERY_NAME) || '';
 		const timeIntervalQuery = params.get(MODE_NAME);
-		const timeInterval: TimeInterval = TimeInterval[timeIntervalQuery as keyof typeof TimeInterval];
-		this._searchFacade.search(cityNameQuery, timeInterval);
-	}
-
-	private _setSearchForm(query = '', mode = TimeInterval.hourly) {
-		this.searchForm = new FormGroup({
-			cityNameQuery: new FormControl(query, Validators.required),
-			timeIntervalMode: new FormControl(mode, Validators.required),
-		})
+		this.timeIntervalMode = TimeInterval[timeIntervalQuery as keyof typeof TimeInterval];
 	}
 
 	ngOnDestroy(): void {

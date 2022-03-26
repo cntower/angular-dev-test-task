@@ -1,0 +1,20 @@
+<form class="search-form" [formGroup]="searchForm" *ngIf="searchForm" (ngSubmit)="onSubmit(searchForm.value)">
+	<mat-form-field aria-label="City name">
+		<mat-label>City</mat-label>
+		<input matInput type="text" formControlName="cityNameQuery" placeholder="Ex. London" />
+	</mat-form-field>
+	<mat-radio-group aria-label="Time interval" color="primary" formControlName="timeInterval">
+		<mat-radio-button value="{{ TimeInterval.hourly }}">Hourly</mat-radio-button>
+		<mat-radio-button value="{{ TimeInterval.daily }}">Daily</mat-radio-button>
+	</mat-radio-group>
+	<div>
+		<button
+			mat-raised-button
+			color="primary"
+			class="search-button"
+			[disabled]="!searchForm.valid || (getIsAnyLoading$ | async)"
+		>
+			Search
+		</button>
+	</div>
+</form>

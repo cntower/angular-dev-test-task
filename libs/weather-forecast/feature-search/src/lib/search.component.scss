@@ -1,12 +1,8 @@
-.search-form {
-	display: flex;
-	flex-flow: column;
-
-	.mat-radio-button ~ .mat-radio-button {
-		margin-left: 16px;
-	}
-}
-
-.search-button {
-	margin: 16px 0;
+:host {
+	display: block;
+	font-family: sans-serif;
+	min-width: 300px;
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 50px 10px;
 }

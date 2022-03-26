@@ -13,3 +13,5 @@ export * from './lib/entities/hourly-forecast-dto';
 export * from './lib/entities/time-interval';
 export * from './lib/entities/query-param-names';
 export * from './lib/entities/forecast-item-view-model';
+export * from './lib/application/search.facade';
+export * from './lib/entities/search-form';

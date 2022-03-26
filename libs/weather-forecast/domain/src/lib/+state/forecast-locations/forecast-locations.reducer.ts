@@ -71,7 +71,7 @@ const forecastLocationsReducer = createReducer(
 	}),
 	on(DailyForecastActions.loadDailyForecastFailure, (state, {error}) => ({
 		...state,
-		error,
+		error: error?.error?.message,
 		isDailyForecastLoading: false
 	})),
 	on(HourlyForecastActions.loadHourlyForecast, state => ({...state, isHourlyForecastLoading: true})),
@@ -83,7 +83,7 @@ const forecastLocationsReducer = createReducer(
 	}),
 	on(HourlyForecastActions.loadHourlyForecastFailure, (state, {error}) => ({
 		...state,
-		error,
+		error: error?.error?.message,
 		isHourlyForecastLoading: false
 	})),
 	on(LocationActions.notFoundQueryRepetition, state=>({...state, isCityNotFound: true}))
