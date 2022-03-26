@@ -16,11 +16,10 @@ export const getAllLocation = createSelector(getLocationState, (state: State) =>
 
 export const getLocationEntities = createSelector(getLocationState, (state: State) => selectEntities(state));
 
-export const getLocationByQuery = createSelector(
+export const getLocationByQuery = (cityNameQuery: string) => createSelector(
 	getAllLocation,
-	(entities: LocationEntity[], props: { cityNameQuery: string }) => {
-		// return entities[0]
-		return entities.find(entity => entity.cityNameQueries[props.cityNameQuery]) as LocationEntity
+	(entities: LocationEntity[]) => {
+		return entities.find(entity => entity.cityNameQueries[cityNameQuery]) as LocationEntity
 	}
 );
 
@@ -56,7 +55,7 @@ export const getLocationHourlyViewModel = createSelector(
 		} as ForecastItemViewModel))
 );
 
-export const getLocationEntityById = (id: string)=> createSelector(
+export const getLocationEntityById = (id: string) => createSelector(
 	getLocationEntities,
 	entities => entities[id] as LocationEntity
 )

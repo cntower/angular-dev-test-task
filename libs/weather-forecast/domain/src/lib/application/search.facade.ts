@@ -17,7 +17,7 @@ export class SearchFacade {
 	readonly getLocationHourlyViewModel$: Observable<ForecastItemViewModel[]> = this._store.select(LocationSelectors.getLocationHourlyViewModel);
 
 	constructor(
-		private _store: Store<LocationReducer.State>,
+		private readonly _store: Store<LocationReducer.State>,
 	) {
 	}
 

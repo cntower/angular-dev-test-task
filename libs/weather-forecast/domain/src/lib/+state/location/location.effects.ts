@@ -16,7 +16,7 @@ export class LocationEffects {
 	search$ = createEffect(() => this._actions$.pipe(
 		ofType(LocationActions.search),
 		filter(action => !!(action.cityNameQuery && action.timeInterval)),
-		concatLatestFrom(({cityNameQuery}) => this._store.select(LocationSelectors.getLocationByQuery, {cityNameQuery})),
+		concatLatestFrom(({cityNameQuery}) => this._store.select(LocationSelectors.getLocationByQuery(cityNameQuery))),
 		map(([action, locationEntity]) => {
 			if (locationEntity) {
 				return LocationActions.addForecast({locationEntity, timeInterval: action.timeInterval});

@@ -37,7 +37,8 @@ console.log({initialState});
 
 const locationReducer = createReducer(
 	initialState,
-	on(LocationActions.loadLocationAndForecast, state => ({...state, loaded: false, error: null, cityNotFound: false})),
+	on(LocationActions.search, state => ({...state, loaded: false, error: null, cityNotFound: false})),
+	on(LocationActions.loadLocationAndForecast, state => ({...state, loaded: false, error: null})),
 	on(LocationActions.loadLocationSuccess, (state, {location, cityNameQuery}) => {
 		if (location) {
 			const _state = locationAdapter.addOne({location, cityNameQueries: {}}, {...state});
