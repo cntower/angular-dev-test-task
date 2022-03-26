@@ -1,7 +1,7 @@
-export * as LocationModels from './lib/+state/location/location.models';
-export * as LocationSelectors from './lib/+state/location/location.selectors';
-export * as LocationReducer from './lib/+state/location/location.reducer';
-export * as LocationActions from './lib/+state/location/location.actions';
+export * as LocationModels from './lib/+state/forecast-locations/forecast-locations.models';
+export * as LocationSelectors from './lib/+state/forecast-locations/forecast-locations.selectors';
+export * as LocationReducer from './lib/+state/forecast-locations/forecast-locations.reducer';
+export * as LocationActions from './lib/+state/forecast-locations/forecast-locations.actions';
 export * as HourlyForecastActions from './lib/+state/hourly-forecast/hourly-forecast.actions';
 export * as DailyForecastActions from './lib/+state/daily-forecast/daily-forecast.actions';
 export * from './lib/weather-forecast-domain.module';

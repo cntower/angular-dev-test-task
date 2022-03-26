@@ -32,7 +32,7 @@
 	<bp-forecast-table
 		*ngSwitchCase="TimeInterval.hourly"
 		[viewModels]="getLocationHourlyViewModel$ | async"
-		[isDataLoading$]="getIsDailyForecastLoading$"
+		[isDataLoading$]="getIsHourlyForecastLoading$"
 		headerDatePipeFormat="HH:mm"
 	></bp-forecast-table>
 </ng-container>

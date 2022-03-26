@@ -15,7 +15,6 @@ export class SearchFacade {
 	readonly getLocationCityNotFound$ = this._store.select(LocationSelectors.getLocationCityNotFound);
 	readonly getLocationDailyViewModel$: Observable<ForecastItemViewModel[]> = this._store.select(LocationSelectors.getLocationDailyViewModel);
 	readonly getLocationHourlyViewModel$: Observable<ForecastItemViewModel[]> = this._store.select(LocationSelectors.getLocationHourlyViewModel);
-	readonly getIsLocationLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsLocationLoading);
 	readonly getIsDailyForecastLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsDailyForecastLoading);
 	readonly getIsHourlyForecastLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsHourlyForecastLoading);
 	readonly getIsAnyLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsAnyLoading);

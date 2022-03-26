@@ -1,9 +1,8 @@
 import {createFeatureSelector, createSelector} from '@ngrx/store';
-import {LOCATION_FEATURE_KEY, locationAdapter, State} from './location.reducer';
-import {LocationEntity} from './location.models';
+import {LOCATION_FEATURE_KEY, locationAdapter, State} from './forecast-locations.reducer';
+import {LocationEntity} from './forecast-locations.models';
 import {ForecastItemViewModel} from '../../entities/forecast-item-view-model';
 
-// Lookup the 'Location' feature state managed by NgRx
 export const getLocationState = createFeatureSelector<State>(LOCATION_FEATURE_KEY);
 
 const {selectAll, selectEntities} = locationAdapter.getSelectors();

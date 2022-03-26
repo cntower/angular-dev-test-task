@@ -1,23 +1,21 @@
 import {Injectable} from '@angular/core';
 import {Actions, concatLatestFrom, createEffect, ofType} from '@ngrx/effects';
 import {fetch} from '@nrwl/angular';
-
-import * as LocationActions from './location.actions';
-import * as LocationSelectors from './location.selectors';
+import * as LocationActions from './forecast-locations.actions';
+import * as LocationSelectors from './forecast-locations.selectors';
 import {WeatherForecastApiService} from '@bp/weather-forecast/services';
 import {filter, map, tap} from 'rxjs';
 import {Dictionary} from '@ngrx/entity';
 import {DailyForecastActions, HourlyForecastActions, LocationReducer, TimeInterval} from '@bp/weather-forecast/domain';
 import {Store} from '@ngrx/store';
-import {locationId} from './location.reducer';
+import {locationId} from './forecast-locations.reducer';
 
 @Injectable()
-export class LocationEffects {
+export class ForecastLocationsEffects {
 	checkForSearch$ = createEffect(() => this._actions$.pipe(
 		ofType(LocationActions.checkNotFoundQueriesThenSearch),
 		filter(action => !!(action.cityNameQuery && action.timeInterval)),
 		concatLatestFrom(({cityNameQuery}) => this._store.select(LocationSelectors.getInNotFoundCityNameQueries(cityNameQuery))),
-		// filter(([action, isNotFoundCity]) => !isNotFoundCity),
 		map(([{cityNameQuery, timeInterval}, isNotFoundCity]) => {
 			if(isNotFoundCity){
 				return LocationActions.notFoundQueryRepetition()

@@ -1,8 +1,8 @@
 import {createEntityAdapter, EntityAdapter, EntityState} from '@ngrx/entity';
 import {Action, createReducer, on} from '@ngrx/store';
 
-import * as LocationActions from './location.actions';
-import {LocationEntity} from './location.models';
+import * as LocationActions from './forecast-locations.actions';
+import {LocationEntity} from './forecast-locations.models';
 import {LocationDto} from '../../entities/location-dto';
 import * as DailyForecastActions from '../daily-forecast/daily-forecast.actions';
 import * as HourlyForecastActions from '../hourly-forecast/hourly-forecast.actions';
@@ -41,7 +41,7 @@ export const initialState: State = locationAdapter.getInitialState({
 
 console.log({initialState});
 
-const locationReducer = createReducer(
+const forecastLocationsReducer = createReducer(
 	initialState,
 	on(LocationActions.search, state => ({...state, error: null, isCityNotFound: false})),
 	on(LocationActions.loadLocationAndForecast, state => ({...state, isLocationLoading: true, error: null})),
@@ -90,5 +90,5 @@ const locationReducer = createReducer(
 );
 
 export function reducer(state: State | undefined, action: Action) {
-	return locationReducer(state, action);
+	return forecastLocationsReducer(state, action);
 }

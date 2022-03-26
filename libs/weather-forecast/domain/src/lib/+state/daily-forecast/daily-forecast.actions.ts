@@ -3,7 +3,7 @@ import {DailyForecastDto} from '../../entities/daily-forecast-dto';
 import {LocationDto} from '../../entities/location-dto';
 
 export const loadDailyForecast = createAction(
-	'[Location Page] Load DailyForecast',
+	'[Forecast Page] Load DailyForecast',
 	props<{ location: LocationDto }>()
 );
 

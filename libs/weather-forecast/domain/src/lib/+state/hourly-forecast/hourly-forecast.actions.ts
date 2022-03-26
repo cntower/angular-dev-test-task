@@ -3,7 +3,7 @@ import {HourlyForecastDto} from '../../entities/hourly-forecast-dto';
 import {LocationDto} from '../../entities/location-dto';
 
 export const loadHourlyForecast = createAction(
-	'[Location Page] Load HourlyForecast',
+	'[Forecast Page] Load HourlyForecast',
 	props<{ location: LocationDto }>()
 );
 
