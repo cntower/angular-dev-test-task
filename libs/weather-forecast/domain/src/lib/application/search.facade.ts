@@ -7,8 +7,7 @@ import {
 	LocationSelectors,
 	TimeInterval,
 } from '@bp/weather-forecast/domain';
-import {Observable, take, tap} from 'rxjs';
-import {LocationEntity} from '../+state/location/location.models';
+import {Observable} from 'rxjs';
 
 
 @Injectable({providedIn: 'root'})
@@ -23,19 +22,6 @@ export class SearchFacade {
 	}
 
 	search(cityNameQuery: string, timeInterval: TimeInterval) {
-		if (cityNameQuery && timeInterval) {
-			this._store.select(LocationSelectors.getLocationByQuery, {cityNameQuery})
-				.pipe(
-					take(1),
-					tap((locationEntity: LocationEntity) => {
-						if (locationEntity) {
-							this._store.dispatch(LocationActions.addForecast({locationEntity, timeInterval}));
-						} else {
-							this._store.dispatch(LocationActions.loadLocationAndForecast({cityNameQuery, timeInterval}));
-						}
-					})
-				)
-				.subscribe();
-		}
+		this._store.dispatch(LocationActions.search({cityNameQuery, timeInterval}));
 	}
 }

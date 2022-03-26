@@ -5,14 +5,19 @@ import {TimeInterval} from '../../entities/time-interval';
 
 export const init = createAction('[Location Page] Init');
 
-export const addForecast = createAction(
-	'[Location/API] Add Forecast',
-	props<{ locationEntity: LocationEntity, timeInterval: TimeInterval }>()
+export const search = createAction(
+	'[Location/API] Search',
+	props<{ cityNameQuery: string, timeInterval: TimeInterval }>()
 );
 
 export const loadLocationAndForecast = createAction(
 	'[Location/API] Load Location And Forecast',
 	props<{ cityNameQuery: string, timeInterval: TimeInterval }>()
+);
+
+export const addForecast = createAction(
+	'[Location/API] Add Forecast',
+	props<{ locationEntity: LocationEntity, timeInterval: TimeInterval }>()
 );
 
 export const loadLocationSuccess = createAction(
