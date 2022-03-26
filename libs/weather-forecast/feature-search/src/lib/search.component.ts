@@ -13,7 +13,7 @@ import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 export class SearchComponent implements OnInit, OnDestroy {
 	private _unsubscribe$ = new Subject<void>();
 
-	readonly getLocationNoCityIsFound$ = this._searchFacade.getLocationNoCityIsFound$;
+	readonly getLocationcityNotFound$ = this._searchFacade.getLocationCityNotFound$;
 	readonly getLocationDailyViewModels$ = this._searchFacade.getLocationDailyViewModel$;
 	readonly getLocationHourlyViewModel$ = this._searchFacade.getLocationHourlyViewModel$;
 
@@ -72,7 +72,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 			.subscribe()
 	}
 
-	private _setForm(query = '', mode = TimeInterval.Hourly) {
+	private _setForm(query = '', mode = TimeInterval.hourly) {
 		this.searchForm = new FormGroup({
 			cityNameQuery: new FormControl(query, Validators.required),
 			timeIntervalMode: new FormControl(mode, Validators.required),

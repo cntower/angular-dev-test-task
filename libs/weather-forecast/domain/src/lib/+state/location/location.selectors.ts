@@ -10,7 +10,7 @@ const {selectAll, selectEntities} = locationAdapter.getSelectors();
 
 export const getLocationError = createSelector(getLocationState, (state: State) => state.error);
 
-export const getLocationNoCityIsFound = createSelector(getLocationState, (state: State) => state.noCityIsFound);
+export const getLocationCityNotFound = createSelector(getLocationState, (state: State) => state.cityNotFound);
 
 export const getAllLocation = createSelector(getLocationState, (state: State) => selectAll(state));
 

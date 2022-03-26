@@ -11,7 +11,7 @@ export const LOCATION_FEATURE_KEY = 'location';
 
 export interface State extends EntityState<LocationEntity> {
 	error?: string | null; // last known error (if any)
-	noCityIsFound?: boolean;
+	cityNotFound?: boolean;
 }
 
 export interface LocationPartialState {
@@ -37,7 +37,7 @@ console.log({initialState});
 
 const locationReducer = createReducer(
 	initialState,
-	on(LocationActions.loadLocation, state => ({...state, loaded: false, error: null, noCityIsFound: false})),
+	on(LocationActions.loadLocation, state => ({...state, loaded: false, error: null, cityNotFound: false})),
 	on(LocationActions.loadLocationSuccess, (state, {location, cityNameQuery}) => {
 		if (location) {
 			const _state = locationAdapter.addOne({location, cityNameQueries: {}}, {...state});
@@ -47,7 +47,7 @@ const locationReducer = createReducer(
 					({...locationEntity, cityNameQueries: {...locationEntity.cityNameQueries, [cityNameQuery]: true}})
 			}, _state)
 		}
-		return {...state, noCityIsFound: true}
+		return {...state, cityNotFound: true}
 	}),
 	on(DailyForecastActions.loadDailyForecastSuccess, (state, {dailyForecast, location}) => {
 		return locationAdapter.mapOne({

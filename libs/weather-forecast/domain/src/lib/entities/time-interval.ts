@@ -1,4 +1,4 @@
 export enum TimeInterval{
-	Daily = 'daily',
-	Hourly = 'hourly',
+	daily = 'daily',
+	hourly = 'hourly',
 }

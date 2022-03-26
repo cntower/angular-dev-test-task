@@ -5,24 +5,24 @@
 		<input matInput type="text" formControlName="cityNameQuery" placeholder="Ex. London" />
 	</mat-form-field>
 	<mat-radio-group aria-label="Time interval" color="primary" formControlName="timeIntervalMode">
-		<mat-radio-button value="{{ TimeInterval.Hourly }}">Hourly</mat-radio-button>
-		<mat-radio-button value="{{ TimeInterval.Daily }}">Daily</mat-radio-button>
+		<mat-radio-button value="{{ TimeInterval.hourly }}">Hourly</mat-radio-button>
+		<mat-radio-button value="{{ TimeInterval.daily }}">Daily</mat-radio-button>
 	</mat-radio-group>
 	<div>
 		<button mat-raised-button color="primary" class="search-button" [disabled]="!searchForm.valid">Search</button>
 	</div>
 </form>
-<div *ngIf="getLocationNoCityIsFound$ | async">City not found</div>
+<mat-error *ngIf="getLocationcityNotFound$ | async">City not found</mat-error>
 
 <ng-container [ngSwitch]="searchForm?.get('timeIntervalMode')?.value">
 	<bp-forecast-table
-		*ngSwitchCase="TimeInterval.Daily"
+		*ngSwitchCase="TimeInterval.daily"
 		[viewModels]="getLocationDailyViewModels$ | async"
 		headerDatePipeFormat="cccccc"
 	></bp-forecast-table>
 
 	<bp-forecast-table
-		*ngSwitchCase="TimeInterval.Hourly"
+		*ngSwitchCase="TimeInterval.hourly"
 		[viewModels]="getLocationHourlyViewModel$ | async"
 		headerDatePipeFormat="HH:mm"
 	></bp-forecast-table>
