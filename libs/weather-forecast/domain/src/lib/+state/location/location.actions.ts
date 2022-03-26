@@ -7,17 +7,17 @@ export const init = createAction('[Location Page] Init');
 
 export const addForecast = createAction(
 	'[Location/API] Add Forecast',
-	props<{ locationEntity: LocationEntity, mode: TimeInterval }>()
+	props<{ locationEntity: LocationEntity, timeInterval: TimeInterval }>()
 );
 
-export const loadLocation = createAction(
-	'[Location/API] Load Location',
-	props<{ cityNameQuery: string }>()
+export const loadLocationAndForecast = createAction(
+	'[Location/API] Load Location And Forecast',
+	props<{ cityNameQuery: string, timeInterval: TimeInterval }>()
 );
 
 export const loadLocationSuccess = createAction(
 	'[Location/API] Load Location Success',
-	props<{ location: LocationDto, cityNameQuery: string }>()
+	props<{ location: LocationDto, cityNameQuery: string, timeInterval: TimeInterval }>()
 );
 
 export const loadLocationFailure = createAction('[Location/API] Load Location Failure', props<{ error: any }>());

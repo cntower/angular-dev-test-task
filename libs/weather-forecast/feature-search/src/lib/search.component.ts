@@ -13,7 +13,7 @@ import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 export class SearchComponent implements OnInit, OnDestroy {
 	private _unsubscribe$ = new Subject<void>();
 
-	readonly getLocationcityNotFound$ = this._searchFacade.getLocationCityNotFound$;
+	readonly getLocationCityNotFound$ = this._searchFacade.getLocationCityNotFound$;
 	readonly getLocationDailyViewModels$ = this._searchFacade.getLocationDailyViewModel$;
 	readonly getLocationHourlyViewModel$ = this._searchFacade.getLocationHourlyViewModel$;
 
@@ -29,24 +29,28 @@ export class SearchComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
-		this._setForm();
-		this._subscribeSearchAfterNavigation();
-		this._subscribeNavigationAfterFormChange();
+		this._setSearchForm();
+		this._subscribeToQueryParams();
+		this._subscribeToFormChange();
 	}
 
-	private _subscribeNavigationAfterFormChange() {
+	private _subscribeToFormChange() {
 		this.searchForm?.get('timeIntervalMode')?.valueChanges
 			.pipe(
 				takeUntil(this._unsubscribe$),
 				tap(timeIntervalMode => {
-					this._router.navigate([], {
-						queryParams: {[MODE_NAME]: timeIntervalMode},
-						relativeTo: this._route,
-						queryParamsHandling: 'merge',
-					});
+					this._navigateByMode(timeIntervalMode);
 				})
 			)
 			.subscribe()
+	}
+
+	private _navigateByMode(timeIntervalMode: TimeInterval) {
+		this._router.navigate([], {
+			queryParams: {[MODE_NAME]: timeIntervalMode},
+			relativeTo: this._route,
+			queryParamsHandling: 'merge',
+		});
 	}
 
 	onSubmit(form: { timeIntervalMode: string; cityNameQuery: string }) {
@@ -59,20 +63,31 @@ export class SearchComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private _subscribeSearchAfterNavigation() {
+	private _subscribeToQueryParams() {
 		this._route.queryParamMap
 			.pipe(
 				takeUntil(this._unsubscribe$),
 				tap((params: ParamMap) => {
-					this.searchForm?.get('cityNameQuery')?.setValue(params.get(QUERY_NAME));
-					this.searchForm?.get('timeIntervalMode')?.setValue(params.get(MODE_NAME));
-				}),
-				tap((params: ParamMap) => this._searchFacade.search(params))
+					this._updateFormWithQueryParams(params);
+					this._search(params);
+				})
 			)
 			.subscribe()
 	}
 
-	private _setForm(query = '', mode = TimeInterval.hourly) {
+	private _updateFormWithQueryParams(params: ParamMap) {
+		this.searchForm?.get('cityNameQuery')?.setValue(params.get(QUERY_NAME));
+		this.searchForm?.get('timeIntervalMode')?.setValue(params.get(MODE_NAME));
+	}
+
+	private _search(params: ParamMap) {
+		const cityNameQuery = params.get(QUERY_NAME) || '';
+		const timeIntervalQuery = params.get(MODE_NAME);
+		const timeInterval: TimeInterval = TimeInterval[timeIntervalQuery as keyof typeof TimeInterval];
+		this._searchFacade.search(cityNameQuery, timeInterval);
+	}
+
+	private _setSearchForm(query = '', mode = TimeInterval.hourly) {
 		this.searchForm = new FormGroup({
 			cityNameQuery: new FormControl(query, Validators.required),
 			timeIntervalMode: new FormControl(mode, Validators.required),
@@ -83,4 +98,5 @@ export class SearchComponent implements OnInit, OnDestroy {
 		this._unsubscribe$.next();
 		this._unsubscribe$.complete();
 	}
+
 }

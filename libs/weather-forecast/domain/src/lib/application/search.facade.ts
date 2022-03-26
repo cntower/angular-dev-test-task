@@ -5,12 +5,9 @@ import {
 	LocationActions,
 	LocationReducer,
 	LocationSelectors,
-	MODE_NAME,
-	QUERY_NAME,
 	TimeInterval,
 } from '@bp/weather-forecast/domain';
-import {ParamMap} from '@angular/router';
-import {filter, Observable, take, tap} from 'rxjs';
+import {Observable, take, tap} from 'rxjs';
 import {LocationEntity} from '../+state/location/location.models';
 
 
@@ -23,40 +20,22 @@ export class SearchFacade {
 	constructor(
 		private _store: Store<LocationReducer.State>,
 	) {
-
 	}
 
-	search(params: ParamMap) {
-		const query = params.get(QUERY_NAME);
-		const _mode = params.get(MODE_NAME);
-		const mode: TimeInterval = TimeInterval[_mode as keyof typeof TimeInterval];
-		if (query && mode) {
-			this._store.select(LocationSelectors.getLocationByQuery, {cityName: query})
+	search(cityNameQuery: string, timeInterval: TimeInterval) {
+		if (cityNameQuery && timeInterval) {
+			this._store.select(LocationSelectors.getLocationByQuery, {cityNameQuery})
 				.pipe(
 					take(1),
 					tap((locationEntity: LocationEntity) => {
 						if (locationEntity) {
-							this._store.dispatch(LocationActions.addForecast({locationEntity, mode}));
+							this._store.dispatch(LocationActions.addForecast({locationEntity, timeInterval}));
 						} else {
-							this._store.dispatch(LocationActions.loadLocation({cityNameQuery: query}));
-							this._loadForecastAfterLocation(query, mode);
+							this._store.dispatch(LocationActions.loadLocationAndForecast({cityNameQuery, timeInterval}));
 						}
 					})
 				)
 				.subscribe();
 		}
-	}
-
-	private _loadForecastAfterLocation(query: string, mode: TimeInterval): void {
-		this._store.select(LocationSelectors.getLocationByQuery, {cityName: query})
-			.pipe(
-				filter((locationEntity: LocationEntity) => !!locationEntity),
-				take(1),
-				tap((locationEntity: LocationEntity) => this._store.dispatch(LocationActions.addForecast({
-					locationEntity,
-					mode
-				}))
-				)
-			).subscribe()
 	}
 }

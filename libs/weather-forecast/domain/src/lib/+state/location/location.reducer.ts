@@ -23,7 +23,7 @@ export function selectLocationId(locationEntity: LocationEntity): string {
 	return locationId(locationEntity.location);
 }
 
-function locationId(location: LocationDto) {
+export function locationId(location: LocationDto) {
 	return `${location.country}|${location.state}|${location.name}`;
 }
 
@@ -37,7 +37,7 @@ console.log({initialState});
 
 const locationReducer = createReducer(
 	initialState,
-	on(LocationActions.loadLocation, state => ({...state, loaded: false, error: null, cityNotFound: false})),
+	on(LocationActions.loadLocationAndForecast, state => ({...state, loaded: false, error: null, cityNotFound: false})),
 	on(LocationActions.loadLocationSuccess, (state, {location, cityNameQuery}) => {
 		if (location) {
 			const _state = locationAdapter.addOne({location, cityNameQueries: {}}, {...state});

@@ -1,26 +1,29 @@
 import {Injectable} from '@angular/core';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
+import {Actions, concatLatestFrom, createEffect, ofType} from '@ngrx/effects';
 import {fetch} from '@nrwl/angular';
 
 import * as LocationActions from './location.actions';
+import * as LocationSelectors from './location.selectors';
 import {WeatherForecastApiService} from '@bp/weather-forecast/services';
 import {filter, map, tap} from 'rxjs';
 import {Dictionary} from '@ngrx/entity';
 import {DailyForecastActions, HourlyForecastActions, LocationReducer, TimeInterval} from '@bp/weather-forecast/domain';
 import {Store} from '@ngrx/store';
+import {locationId} from './location.reducer';
 
 @Injectable()
 export class LocationEffects {
-	loadLocation$ = createEffect(() =>
+	loadLocationAndForecast$ = createEffect(() =>
 		this._actions$.pipe(
-			ofType(LocationActions.loadLocation),
+			ofType(LocationActions.loadLocationAndForecast),
 			fetch({
 				run: action => {
-					return this._weatherForecastApiService.getLocales(action.cityNameQuery)
+					return this._weatherForecastApiService.getLocations(action.cityNameQuery)
 						.pipe(
 							map(locations => LocationActions.loadLocationSuccess({
 								location: locations[0],
-								cityNameQuery: action.cityNameQuery
+								cityNameQuery: action.cityNameQuery,
+								timeInterval: action.timeInterval,
 							}))
 						)
 				},
@@ -32,14 +35,20 @@ export class LocationEffects {
 		)
 	);
 
+	loadLocationSuccess$ = createEffect(() => this._actions$.pipe(
+		ofType(LocationActions.loadLocationSuccess),
+		concatLatestFrom((action) => this._store.select(LocationSelectors.getLocationEntityById(locationId(action.location)))),
+		map(([action, locationEntity]) => LocationActions.addForecast({locationEntity, timeInterval: action.timeInterval}))
+	))
+
 	addForecast$ = createEffect(() => this._actions$.pipe(
 		ofType(LocationActions.addForecast),
-		filter(({locationEntity, mode}) => !(locationEntity as Dictionary<any>)[mode]),
-		tap(({locationEntity, mode}) => {
-			if (mode === TimeInterval.daily) {
+		filter(({locationEntity, timeInterval}) => !(locationEntity as Dictionary<any>)[timeInterval]),
+		tap(({locationEntity, timeInterval}) => {
+			if (timeInterval === TimeInterval.daily) {
 				this._store.dispatch(DailyForecastActions.loadDailyForecast({location: locationEntity.location}))
 			}
-			if (mode === TimeInterval.hourly) {
+			if (timeInterval === TimeInterval.hourly) {
 				this._store.dispatch(HourlyForecastActions.loadHourlyForecast({location: locationEntity.location}))
 			}
 		})

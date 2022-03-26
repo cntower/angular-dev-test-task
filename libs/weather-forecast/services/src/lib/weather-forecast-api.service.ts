@@ -15,7 +15,7 @@ export class WeatherForecastApiService {
 	) {
 	}
 
-	getLocales(cityName: string):Observable<LocationDto[]>{
+	getLocations(cityName: string):Observable<LocationDto[]>{
 		return this._http.get<LocationDto[]>(this._getGetLocalesRequestUrl(cityName));
 	}
 
