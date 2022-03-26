@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {MODE_NAME, QUERY_NAME, SearchFacade, SearchForm, TimeInterval} from '@bp/weather-forecast/domain';
 import {Subject, takeUntil, tap} from 'rxjs';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
@@ -6,7 +6,8 @@ import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 @Component({
 	selector: 'bp-search',
 	templateUrl: './search.component.html',
-	styleUrls: ['./search.component.scss']
+	styleUrls: ['./search.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent implements OnInit, OnDestroy {
 	private _unsubscribe$ = new Subject<void>();
@@ -21,8 +22,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
 	readonly TimeInterval = TimeInterval;
 
-	cityNameQuery = '';
-	timeIntervalMode = TimeInterval.daily;
+	cityNameQueryQueryParam = '';
+	timeIntervalQueryParam = TimeInterval.daily;
 
 	constructor(
 		private readonly _searchFacade: SearchFacade,
@@ -60,16 +61,16 @@ export class SearchComponent implements OnInit, OnDestroy {
 				takeUntil(this._unsubscribe$),
 				tap((params: ParamMap) => {
 					this._updateFormWithQueryParams(params);
-					this._searchFacade.search(this.cityNameQuery, this.timeIntervalMode);
+					this._searchFacade.search(this.cityNameQueryQueryParam, this.timeIntervalQueryParam);
 				})
 			)
 			.subscribe();
 	}
 
 	private _updateFormWithQueryParams(params: ParamMap) {
-		this.cityNameQuery = params.get(QUERY_NAME) || '';
-		const timeIntervalQuery = params.get(MODE_NAME);
-		this.timeIntervalMode = TimeInterval[timeIntervalQuery as keyof typeof TimeInterval];
+		this.cityNameQueryQueryParam = params.get(QUERY_NAME) || '';
+		const timeIntervalStr = params.get(MODE_NAME);
+		this.timeIntervalQueryParam = TimeInterval[timeIntervalStr as keyof typeof TimeInterval];
 	}
 
 	ngOnDestroy(): void {

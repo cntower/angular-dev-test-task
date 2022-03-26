@@ -1,8 +1,8 @@
 <h2>Weather in your city</h2>
 
 <bp-search-form
-	[query]="cityNameQuery"
-	[mode]="timeIntervalMode"
+	[cityNameQuery]="cityNameQueryQueryParam"
+	[timeInterval]="timeIntervalQueryParam"
 	[getIsAnyLoading$]="getIsAnyLoading$"
 	(formSubmit)="onSubmit($event)"
 	(timeIntervalChanged)="onTimeIntervalChanged($event)"
@@ -12,7 +12,7 @@
 
 <mat-error *ngIf="getLocationError$ | async as error">{{ error | json }}</mat-error>
 
-<ng-container [ngSwitch]="timeIntervalMode">
+<ng-container [ngSwitch]="timeIntervalQueryParam">
 	<bp-forecast-table
 		*ngSwitchCase="TimeInterval.daily"
 		[viewModels]="getLocationDailyViewModels$ | async"

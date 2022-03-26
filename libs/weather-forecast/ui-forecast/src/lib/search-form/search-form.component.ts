@@ -13,19 +13,19 @@ import {Observable, Subject, takeUntil, tap} from 'rxjs';
 export class SearchFormComponent implements OnInit, OnDestroy{
 	private _unsubscribe$ = new Subject<void>();
 
-	private _query?: string;
+	private _cityNameQuery?: string;
 
 	@Input()
-	set query(value: string) {
-		this._query = value;
+	set cityNameQuery(value: string) {
+		this._cityNameQuery = value;
 		this.searchForm?.get('cityNameQuery')?.setValue(value);
 	}
 
-	private _mode?: TimeInterval;
+	private _timeInterval?: TimeInterval;
 
 	@Input()
-	set mode(value: TimeInterval) {
-		this._mode = value;
+	set timeInterval(value: TimeInterval) {
+		this._timeInterval = value;
 		this.searchForm?.get('timeInterval')?.setValue(value);
 	}
 
@@ -40,7 +40,7 @@ export class SearchFormComponent implements OnInit, OnDestroy{
 	searchForm?: FormGroup;
 
 	ngOnInit(): void {
-		this._setSearchForm(this._query, this._mode);
+		this._setSearchForm(this._cityNameQuery, this._timeInterval);
 		this._subscribeToFormChange();
 	}
 
