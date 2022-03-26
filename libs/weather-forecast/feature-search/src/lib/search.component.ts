@@ -16,15 +16,18 @@ export class SearchComponent implements OnInit, OnDestroy {
 	readonly getLocationCityNotFound$ = this._searchFacade.getLocationCityNotFound$;
 	readonly getLocationDailyViewModels$ = this._searchFacade.getLocationDailyViewModel$;
 	readonly getLocationHourlyViewModel$ = this._searchFacade.getLocationHourlyViewModel$;
+	readonly getIsAnyLoading$ = this._searchFacade.getIsAnyLoading$;
+	readonly getIsDailyForecastLoading$ = this._searchFacade.getIsDailyForecastLoading$;
+	readonly getIsHourlyForecastLoading$ = this._searchFacade.getIsHourlyForecastLoading$;
 
-	TimeInterval = TimeInterval;
+	readonly TimeInterval = TimeInterval;
 
 	searchForm?: FormGroup;
 
 	constructor(
-		private _searchFacade: SearchFacade,
-		private _router: Router,
-		private _route: ActivatedRoute,
+		private readonly _searchFacade: SearchFacade,
+		private readonly _router: Router,
+		private readonly _route: ActivatedRoute,
 	) {
 	}
 

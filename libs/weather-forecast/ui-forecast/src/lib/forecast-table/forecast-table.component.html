@@ -19,7 +19,7 @@
 	</table>
 </div>
 <ng-template #spinner>
-	<div class="spinner">
+	<div class="spinner" *ngIf="isDataLoading$ | async">
 		<mat-spinner></mat-spinner>
 	</div>
 </ng-template>

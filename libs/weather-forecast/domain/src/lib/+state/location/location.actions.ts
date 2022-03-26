@@ -5,18 +5,25 @@ import {TimeInterval} from '../../entities/time-interval';
 
 export const init = createAction('[Location Page] Init');
 
+export const notFoundQueryRepetition = createAction('[Location Page] Not Found Query Repetition');
+
+export const checkNotFoundQueriesThenSearch = createAction(
+	'[Location Page] Check Not Found Queries Then Search',
+	props<{ cityNameQuery: string, timeInterval: TimeInterval }>()
+);
+
 export const search = createAction(
-	'[Location/API] Search',
+	'[Location Page] Search',
 	props<{ cityNameQuery: string, timeInterval: TimeInterval }>()
 );
 
 export const loadLocationAndForecast = createAction(
-	'[Location/API] Load Location And Forecast',
+	'[Location Page] Load Location And Forecast',
 	props<{ cityNameQuery: string, timeInterval: TimeInterval }>()
 );
 
 export const addForecast = createAction(
-	'[Location/API] Add Forecast',
+	'[Location Page] Add Forecast',
 	props<{ locationEntity: LocationEntity, timeInterval: TimeInterval }>()
 );
 

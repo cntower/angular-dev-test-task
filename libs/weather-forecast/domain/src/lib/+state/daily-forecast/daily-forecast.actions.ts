@@ -2,10 +2,8 @@ import { createAction, props } from '@ngrx/store';
 import {DailyForecastDto} from '../../entities/daily-forecast-dto';
 import {LocationDto} from '../../entities/location-dto';
 
-export const init = createAction('[DailyForecast Page] Init');
-
 export const loadDailyForecast = createAction(
-	'[DailyForecast/API] Load DailyForecast',
+	'[Location Page] Load DailyForecast',
 	props<{ location: LocationDto }>()
 );
 

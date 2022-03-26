@@ -13,9 +13,21 @@ import {locationId} from './location.reducer';
 
 @Injectable()
 export class LocationEffects {
+	checkForSearch$ = createEffect(() => this._actions$.pipe(
+		ofType(LocationActions.checkNotFoundQueriesThenSearch),
+		filter(action => !!(action.cityNameQuery && action.timeInterval)),
+		concatLatestFrom(({cityNameQuery}) => this._store.select(LocationSelectors.getInNotFoundCityNameQueries(cityNameQuery))),
+		// filter(([action, isNotFoundCity]) => !isNotFoundCity),
+		map(([{cityNameQuery, timeInterval}, isNotFoundCity]) => {
+			if(isNotFoundCity){
+				return LocationActions.notFoundQueryRepetition()
+			}
+			return LocationActions.search({cityNameQuery, timeInterval})
+		})
+	))
+
 	search$ = createEffect(() => this._actions$.pipe(
 		ofType(LocationActions.search),
-		filter(action => !!(action.cityNameQuery && action.timeInterval)),
 		concatLatestFrom(({cityNameQuery}) => this._store.select(LocationSelectors.getLocationByQuery(cityNameQuery))),
 		map(([action, locationEntity]) => {
 			if (locationEntity) {
@@ -53,7 +65,10 @@ export class LocationEffects {
 
 	loadLocationSuccess$ = createEffect(() => this._actions$.pipe(
 		ofType(LocationActions.loadLocationSuccess),
-		concatLatestFrom((action) => this._store.select(LocationSelectors.getLocationEntityById(locationId(action.location)))),
+		filter(({location}) => !!location),
+		concatLatestFrom((action) =>
+			this._store.select(LocationSelectors.getLocationEntityById(locationId(action.location)))
+		),
 		map(([action, locationEntity]) => LocationActions.addForecast({locationEntity, timeInterval: action.timeInterval}))
 	))
 

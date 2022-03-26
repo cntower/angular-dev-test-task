@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {ForecastItemViewModel, ViewModelColumn} from '@bp/weather-forecast/domain';
+import {Observable} from 'rxjs';
 
 @Component({
 	selector: 'bp-forecast-table',
@@ -23,6 +24,8 @@ export class ForecastTableComponent {
 	};
 
 	@Input() headerDatePipeFormat = '';
+
+	@Input() isDataLoading$?: Observable<boolean | undefined>;
 
 	columns: ViewModelColumn[] = [];
 

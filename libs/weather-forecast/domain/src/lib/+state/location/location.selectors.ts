@@ -10,7 +10,21 @@ const {selectAll, selectEntities} = locationAdapter.getSelectors();
 
 export const getLocationError = createSelector(getLocationState, (state: State) => state.error);
 
-export const getLocationCityNotFound = createSelector(getLocationState, (state: State) => state.cityNotFound);
+export const getNotFoundCityNameQueries = createSelector(getLocationState, (state: State) => state.notFoundCityNameQueries);
+
+export const getLocationCityNotFound = createSelector(getLocationState, (state: State) => state.isCityNotFound);
+
+export const getIsLocationLoading = createSelector(getLocationState, (state: State) => state.isLocationLoading);
+
+export const getIsDailyForecastLoading = createSelector(getLocationState, (state: State) => state.isDailyForecastLoading);
+
+export const getIsHourlyForecastLoading = createSelector(getLocationState, (state: State) => state.isHourlyForecastLoading);
+
+export const getIsAnyLoading = createSelector(getLocationState, (state: State) => (
+	state.isLocationLoading
+  || state.isDailyForecastLoading
+  || state.isHourlyForecastLoading
+));
 
 export const getAllLocation = createSelector(getLocationState, (state: State) => selectAll(state));
 
@@ -58,4 +72,9 @@ export const getLocationHourlyViewModel = createSelector(
 export const getLocationEntityById = (id: string) => createSelector(
 	getLocationEntities,
 	entities => entities[id] as LocationEntity
-)
+);
+
+export const getInNotFoundCityNameQueries = (cityName: string) => createSelector(
+	getNotFoundCityNameQueries,
+	notFoundCityNameQueries => notFoundCityNameQueries[cityName]
+);

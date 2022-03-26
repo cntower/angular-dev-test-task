@@ -9,7 +9,14 @@
 		<mat-radio-button value="{{ TimeInterval.daily }}">Daily</mat-radio-button>
 	</mat-radio-group>
 	<div>
-		<button mat-raised-button color="primary" class="search-button" [disabled]="!searchForm.valid">Search</button>
+		<button
+			mat-raised-button
+			color="primary"
+			class="search-button"
+			[disabled]="!searchForm.valid || (getIsAnyLoading$ | async)"
+		>
+			Search
+		</button>
 	</div>
 </form>
 <mat-error *ngIf="getLocationCityNotFound$ | async">City not found</mat-error>
@@ -18,12 +25,14 @@
 	<bp-forecast-table
 		*ngSwitchCase="TimeInterval.daily"
 		[viewModels]="getLocationDailyViewModels$ | async"
+		[isDataLoading$]="getIsDailyForecastLoading$"
 		headerDatePipeFormat="cccccc"
 	></bp-forecast-table>
 
 	<bp-forecast-table
 		*ngSwitchCase="TimeInterval.hourly"
 		[viewModels]="getLocationHourlyViewModel$ | async"
+		[isDataLoading$]="getIsDailyForecastLoading$"
 		headerDatePipeFormat="HH:mm"
 	></bp-forecast-table>
 </ng-container>

@@ -15,6 +15,10 @@ export class SearchFacade {
 	readonly getLocationCityNotFound$ = this._store.select(LocationSelectors.getLocationCityNotFound);
 	readonly getLocationDailyViewModel$: Observable<ForecastItemViewModel[]> = this._store.select(LocationSelectors.getLocationDailyViewModel);
 	readonly getLocationHourlyViewModel$: Observable<ForecastItemViewModel[]> = this._store.select(LocationSelectors.getLocationHourlyViewModel);
+	readonly getIsLocationLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsLocationLoading);
+	readonly getIsDailyForecastLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsDailyForecastLoading);
+	readonly getIsHourlyForecastLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsHourlyForecastLoading);
+	readonly getIsAnyLoading$: Observable<boolean | undefined> = this._store.select(LocationSelectors.getIsAnyLoading);
 
 	constructor(
 		private readonly _store: Store<LocationReducer.State>,
@@ -22,6 +26,6 @@ export class SearchFacade {
 	}
 
 	search(cityNameQuery: string, timeInterval: TimeInterval) {
-		this._store.dispatch(LocationActions.search({cityNameQuery, timeInterval}));
+		this._store.dispatch(LocationActions.checkNotFoundQueriesThenSearch({cityNameQuery, timeInterval}));
 	}
 }
